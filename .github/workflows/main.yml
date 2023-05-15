@@ -1,0 +1,41 @@
+name: Validation and tests
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+    
+env:
+  # Java
+  JAVA_VERSION: 17
+  JAVA_DISTRIBUTION: oracle
+  # PostgreSQL
+  POSTGRESQL_USER: postgres
+  POSTGRESQL_PASSWORD: ${{secrets.PASSWORD}}
+  POSTGRESQL_DB: SpeakFreely
+
+jobs:
+  build:
+    runs-on: ${{matrix.os}}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: ${{env.JAVA_VERSION}}
+        distribution: ${{env.JAVA_DISTRIBUTION}}
+        cache: maven
+    - name: Connect to database
+      uses: ikalnytskyi/action-setup-postgres@v4
+      with:
+        username: ${{env.POSTGRESQL_USER}}
+        password: ${{env.POSTGRESQL_PASSWORD}}
+        database: ${{env.POSTGRESQL_DB}}
+        port: 5432
+      id: postgres
+    - name: Build with Maven
+      run: mvn -B package --file SpeakFreely/pom.xml

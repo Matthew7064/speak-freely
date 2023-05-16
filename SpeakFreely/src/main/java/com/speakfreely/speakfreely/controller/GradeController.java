@@ -74,7 +74,7 @@ public class GradeController {
             grade.setWeight(Integer.parseInt(updates.get("weight")));
         }
         if (updates.containsKey("description")) {
-            grade.setDescription((String) updates.get("description"));
+            grade.setDescription(updates.get("description"));
         }
         grade.setDate(new Date());
         gradeRepository.save(grade);

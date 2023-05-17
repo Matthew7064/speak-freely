@@ -7,7 +7,7 @@ import com.speakfreely.speakfreely.repository.TutorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+//import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
+//@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RequestMapping("/tutors")
 public class TutorController {
     private final TutorRepository tutorRepository;
@@ -28,26 +28,26 @@ public class TutorController {
         this.courseRepository = courseRepository;
     }
 
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('TUTOR')")
+    //@PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('TUTOR')")
     @GetMapping
     public List<Tutor> findAllTutors() {
         return tutorRepository.findAll();
     }
 
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('TUTOR')")
+    //@PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('TUTOR')")
     @GetMapping("/{id}")
     public Optional<Tutor> findTutor(@PathVariable("id") Long id) {
         return tutorRepository.findById(id);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Tutor> addTutor(@RequestBody Tutor tutor) {
         tutorRepository.save(tutor);
         return new ResponseEntity<>(tutor, HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Tutor> deleteTutor(@PathVariable("id") Long id) {
         Optional<Tutor> tutor = tutorRepository.findById(id);
@@ -60,7 +60,7 @@ public class TutorController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping
     public ResponseEntity<Tutor> deleteAllTutors() {
         tutorRepository.findAll().parallelStream()
@@ -70,7 +70,7 @@ public class TutorController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Tutor> updateTutor(@RequestBody Tutor tutor, @PathVariable("id") Long id) {
         Optional<Tutor> updatedTutor = tutorRepository.findById(id);
@@ -86,14 +86,14 @@ public class TutorController {
         return new ResponseEntity<>(tutor, HttpStatus.NO_CONTENT);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     @PutMapping
     public ResponseEntity<List<Tutor>> updateAllTutors(@RequestBody List<Tutor> tutors) {
         tutors.parallelStream().forEach(tutorRepository::save);
         return new ResponseEntity<>(tutors, HttpStatus.NO_CONTENT);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{id}")
     public ResponseEntity<Tutor> updatePartOfTutor(@RequestBody Map<String, Object> updates, @PathVariable("id") Long id) {
         Optional<Tutor> tutor = tutorRepository.findById(id);
@@ -118,7 +118,7 @@ public class TutorController {
         tutorRepository.save(tutor);
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('TUTOR')")
+    //@PreAuthorize("hasRole('ADMIN') or hasRole('TUTOR')")
     @GetMapping("/{tutorId}/courses/{courseId}")
     public ResponseEntity<Course> getCourse(@PathVariable Long tutorId, @PathVariable Long courseId) {
         Optional<Tutor> tutor = tutorRepository.findById(tutorId);
@@ -131,7 +131,7 @@ public class TutorController {
         return toSend.map(course -> new ResponseEntity<>(course, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('TUTOR')")
+    //@PreAuthorize("hasRole('ADMIN') or hasRole('TUTOR')")
     @GetMapping("/{tutorId}/courses")
     public List<Course> getCourses(@PathVariable Long tutorId) {
         Optional<Tutor> tutor = tutorRepository.findById(tutorId);

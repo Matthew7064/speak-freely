@@ -9,7 +9,7 @@ import com.speakfreely.speakfreely.repository.ParticipantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+//import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
+//@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RequestMapping("/participants")
 public class ParticipantController {
     private final ParticipantRepository participantRepository;
@@ -32,26 +32,26 @@ public class ParticipantController {
         this.courseRepository = courseRepository;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public List<Participant> findAllParticipants() {
         return participantRepository.findAll();
     }
 
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('TUTOR')")
+    //@PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('TUTOR')")
     @GetMapping("/{id}")
     public Optional<Participant> findParticipant(@PathVariable("id") Long id) {
         return participantRepository.findById(id);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Participant> addParticipant(@RequestBody Participant participant) {
         participantRepository.save(participant);
         return new ResponseEntity<>(participant, HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Participant> deleteParticipant(@PathVariable("id") Long id) {
         Optional<Participant> optionalParticipant = participantRepository.findById(id);
@@ -68,7 +68,7 @@ public class ParticipantController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping
     public ResponseEntity<Participant> deleteAllParticipants() {
         participantRepository.findAll().stream().flatMap(participant -> participant.getGrades().parallelStream())
@@ -79,7 +79,7 @@ public class ParticipantController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<Participant> updateParticipant(@RequestBody Participant participant, @PathVariable("id") Long id) {
         Optional<Participant> updatedParticipant = participantRepository.findById(id);
@@ -95,14 +95,14 @@ public class ParticipantController {
         return new ResponseEntity<>(participant, HttpStatus.NO_CONTENT);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     @PutMapping
     public ResponseEntity<List<Participant>> updateAllParticipants(@RequestBody List<Participant> participants) {
         participants.parallelStream().forEach(participantRepository::save);
         return new ResponseEntity<>(participants, HttpStatus.NO_CONTENT);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{id}")
     public ResponseEntity<Participant> updatePartOfParticipant(@RequestBody Map<String, Object> updates, @PathVariable("id") Long id) {
         Optional<Participant> participant = participantRepository.findById(id);
@@ -127,7 +127,7 @@ public class ParticipantController {
         participantRepository.save(participant);
     }
 
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('TUTOR')")
+    //@PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('TUTOR')")
     @GetMapping("/{participantId}/grades")
     public ResponseEntity<List<Grade>> viewAllGrades(@PathVariable Long participantId) {
         Optional<Participant> participant = participantRepository.findById(participantId);
@@ -138,7 +138,7 @@ public class ParticipantController {
         return new ResponseEntity<>(participant.get().getGrades(), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('TUTOR')")
+    //@PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('TUTOR')")
     @GetMapping("/{participantId}/grades/{gradeId}")
     public ResponseEntity<Grade> viewSpecificGrade(@PathVariable Long participantId, @PathVariable Long gradeId) {
         Optional<Participant> participant = participantRepository.findById(participantId);
@@ -156,7 +156,7 @@ public class ParticipantController {
         }
     }
 
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('TUTOR')")
+    //@PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('TUTOR')")
     @GetMapping("/{participantId}/courses/{courseId}/grades")
     public ResponseEntity<List<Grade>> viewAllCourseGrades(@PathVariable Long participantId, @PathVariable Long courseId) {
         Optional<Participant> participant = participantRepository.findById(participantId);
@@ -175,7 +175,7 @@ public class ParticipantController {
                 .collect(Collectors.toList()), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('TUTOR')")
+    //@PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('TUTOR')")
     @GetMapping("{participantId}/courses")
     public ResponseEntity<List<Course>> viewCourses(@PathVariable Long participantId) {
         Optional<Participant> participant = participantRepository.findById(participantId);
@@ -186,7 +186,7 @@ public class ParticipantController {
         return new ResponseEntity<>(participant.get().getCourses(), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('TUTOR')")
+    //@PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('TUTOR')")
     @GetMapping("/{participantId}/courses/{courseId}")
     public ResponseEntity<Course> viewCourse(@PathVariable Long participantId, @PathVariable Long courseId) {
         Optional<Participant> participant = participantRepository.findById(participantId);
@@ -202,7 +202,7 @@ public class ParticipantController {
         return new ResponseEntity<>(course.get(), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{participantId}/addPayment")
     public ResponseEntity<Participant> addPayment(@PathVariable Long participantId) {
         Optional<Participant> participant = participantRepository.findById(participantId);
@@ -215,7 +215,7 @@ public class ParticipantController {
         return new ResponseEntity<>(participant.get(), HttpStatus.ACCEPTED);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{participantId}/deletePayment")
     public ResponseEntity<Participant> deletePayment(@PathVariable Long participantId) {
         Optional<Participant> participant = participantRepository.findById(participantId);

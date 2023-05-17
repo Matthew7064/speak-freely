@@ -5,7 +5,7 @@ import com.speakfreely.speakfreely.repository.GradeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+//import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
+//@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 public class GradeController {
     private final GradeRepository gradeRepository;
 
@@ -23,19 +23,19 @@ public class GradeController {
         this.gradeRepository = gradeRepository;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/grades")
     public List<Grade> findAllGrades() {
         return gradeRepository.findAll();
     }
 
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('TUTOR')")
+    //@PreAuthorize("hasRole('USER') or hasRole('ADMIN') or hasRole('TUTOR')")
     @GetMapping("/grades/{id}")
     public Optional<Grade> findGrade(@PathVariable("id") Long id) {
         return gradeRepository.findById(id);
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('TUTOR')")
+    //@PreAuthorize("hasRole('ADMIN') or hasRole('TUTOR')")
     @DeleteMapping("/grades/{id}")
     public ResponseEntity<Grade> deleteGrade(@PathVariable("id") Long id) {
         Optional<Grade> grade = gradeRepository.findById(id);
@@ -47,14 +47,14 @@ public class GradeController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/grades")
     public ResponseEntity<Grade> deleteAllGrades() {
         gradeRepository.deleteAll();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('TUTOR')")
+    //@PreAuthorize("hasRole('ADMIN') or hasRole('TUTOR')")
     @PatchMapping("/grades/{id}")
     public ResponseEntity<Grade> updatePartOfGrade(@RequestBody Map<String, String> updates, @PathVariable("id") Long id) {
         Optional<Grade> grade = gradeRepository.findById(id);

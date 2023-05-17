@@ -61,7 +61,7 @@ public class CourseController {
             System.out.println("Attempt to delete non existing course.");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        course.get().getGrades().parallelStream().
+        course.get().getGrades().stream().
                 mapToLong(Grade::getId).forEach(gradeRepository::deleteById);
         course.get().deleteParticipants();
         course.get().deleteTutor();
@@ -77,7 +77,7 @@ public class CourseController {
             course.deleteTutor();
         });
         courseRepository.findAll().stream()
-                .flatMap(course -> course.getGrades().parallelStream())
+                .flatMap(course -> course.getGrades().stream())
                 .mapToLong(Grade::getId).forEach(gradeRepository::deleteById);
         courseRepository.deleteAll();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -101,7 +101,7 @@ public class CourseController {
     //@PreAuthorize("hasRole('ADMIN')")
     @PutMapping
     public ResponseEntity<List<Course>> updateAllCourses(@RequestBody List<Course> courses) {
-        courses.parallelStream().forEach(courseRepository::save);
+        courses.stream().forEach(courseRepository::save);
         return new ResponseEntity<>(courses, HttpStatus.NO_CONTENT);
     }
 

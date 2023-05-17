@@ -55,7 +55,7 @@ public class TutorController {
             System.out.println("Attempt to delete non existing tutor.");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        tutor.get().getCourses().parallelStream().forEach(Course::deleteTutor);
+        tutor.get().getCourses().stream().forEach(Course::deleteTutor);
         tutorRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -63,7 +63,7 @@ public class TutorController {
     //@PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping
     public ResponseEntity<Tutor> deleteAllTutors() {
-        tutorRepository.findAll().parallelStream()
+        tutorRepository.findAll().stream()
                 .flatMap(tutor -> tutor.getCourses().stream())
                 .forEach(Course::deleteTutor);
         tutorRepository.deleteAll();
@@ -89,7 +89,7 @@ public class TutorController {
     //@PreAuthorize("hasRole('ADMIN')")
     @PutMapping
     public ResponseEntity<List<Tutor>> updateAllTutors(@RequestBody List<Tutor> tutors) {
-        tutors.parallelStream().forEach(tutorRepository::save);
+        tutorRepository.saveAll(tutors);
         return new ResponseEntity<>(tutors, HttpStatus.NO_CONTENT);
     }
 

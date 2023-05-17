@@ -60,9 +60,9 @@ public class ParticipantController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         var participant = optionalParticipant.get();
-        participant.getGrades().parallelStream()
+        participant.getGrades().stream()
                 .mapToLong(Grade::getId).forEach(gradeRepository::deleteById);
-        participant.getCourses().parallelStream()
+        participant.getCourses()
                 .forEach(course -> course.deleteParticipant(participant));
         participantRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -71,9 +71,9 @@ public class ParticipantController {
     //@PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping
     public ResponseEntity<Participant> deleteAllParticipants() {
-        participantRepository.findAll().stream().flatMap(participant -> participant.getGrades().parallelStream())
+        participantRepository.findAll().stream().flatMap(participant -> participant.getGrades().stream())
                 .mapToLong(Grade::getId).forEach(gradeRepository::deleteById);
-        participantRepository.findAll().forEach(participant -> participant.getCourses().parallelStream().
+        participantRepository.findAll().forEach(participant -> participant.getCourses().stream().
                 forEach(course -> course.deleteParticipant(participant)));
         participantRepository.deleteAll();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -98,7 +98,7 @@ public class ParticipantController {
     //@PreAuthorize("hasRole('ADMIN')")
     @PutMapping
     public ResponseEntity<List<Participant>> updateAllParticipants(@RequestBody List<Participant> participants) {
-        participants.parallelStream().forEach(participantRepository::save);
+        participantRepository.saveAll(participants);
         return new ResponseEntity<>(participants, HttpStatus.NO_CONTENT);
     }
 

@@ -1,0 +1,1251 @@
+{
+	"info": {
+		"_postman_id": "f83a9737-95f5-4ce1-8cf2-975ff6f53e5a",
+		"name": "SpeakFreely actions",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20003081"
+	},
+	"item": [
+		{
+			"name": "Register participant",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"participant_name1\",\r\n    \"surname\": \"participant_surname1\",\r\n    \"email\": \"p1@edu.mail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/participants",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"participants"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get participant",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/participants/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"participants",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update list of participants",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\r\n    \"name\": \"participant_name2\",\r\n    \"surname\": \"participant_surname2\",\r\n    \"email\": \"p2@edu.mail.com\"\r\n},\r\n{\r\n    \"name\": \"participant_name3\",\r\n    \"surname\": \"participant_surname3\",\r\n    \"email\": \"p3@edu.mail.com\"\r\n}]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/participants",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"participants"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update participant",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"participant_name1_updated\",\r\n    \"surname\": \"participant_surname1_updated\",\r\n    \"email\": \"p1_updated@edu.mail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/participants/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"participants",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update part of participant",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"surname\": \"participant_surname2\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/participants/2",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"participants",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get participants",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/participants",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"participants"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register tutor",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"tutor_name1\",\r\n    \"surname\": \"tutor_surname1\",\r\n    \"email\": \"t1@mail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/tutors",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"tutors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get tutor",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/tutors/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"tutors",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update list of tutors",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\r\n    \"name\": \"tutor_name2\",\r\n    \"surname\": \"tutor_surname2\",\r\n    \"email\": \"t2@mail.com\"\r\n},\r\n{\r\n    \"name\": \"tutor_name3\",\r\n    \"surname\": \"tutor_surname3\",\r\n    \"email\": \"t3@mail.com\"\r\n}]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/tutors",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"tutors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update tutor",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"tutor_name1_updated\",\r\n    \"surname\": \"tutor_surname1_updated\",\r\n    \"email\": \"t1_updated@mail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/tutors/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"tutors",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update part of tutor",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"surname\": \"tutor_surname2\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/tutors/2",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"tutors",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get tutors",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/tutors",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"tutors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register course",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"course1\",\r\n    \"description\": \"course1_description\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/courses",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"courses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get course",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/courses/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"courses",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update list of courses",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\r\n    \"name\": \"course2\",\r\n    \"description\": \"course2_description\"\r\n},\r\n{\r\n    \"name\": \"course3\",\r\n    \"description\": \"course3_description\"\r\n}\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/courses",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"courses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update course",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"course1_updated\",\r\n    \"description\": \"course1_description_updated\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/courses/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"courses",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update part of course",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"description\": \"course2_description\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/courses/2",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"courses",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get courses",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/courses",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"courses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Enroll participant to course",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/courses/1/participants/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"courses",
+						"1",
+						"participants",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Assign tutor to course",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/courses/1/tutors/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"courses",
+						"1",
+						"tutors",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get course of participant",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/participants/1/courses/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"participants",
+						"1",
+						"courses",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get courses of participant",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/participants/1/courses",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"participants",
+						"1",
+						"courses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get participant from course",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/courses/1/participants/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"courses",
+						"1",
+						"participants",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get participants from course",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/courses/1/participants",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"courses",
+						"1",
+						"participants"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get tutor from course",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/courses/1/tutors",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"courses",
+						"1",
+						"tutors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get course from tutor",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/tutors/1/courses/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"tutors",
+						"1",
+						"courses",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get courses from tutor",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/tutors/1/courses",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"tutors",
+						"1",
+						"courses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Give grade",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"grade\": 5,\r\n    \"weight\": 1,\r\n    \"description\": \"grade_description\",\r\n    \"date\": \"2023-05-01\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/courses/1/participants/1/grades",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"courses",
+						"1",
+						"participants",
+						"1",
+						"grades"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get grade",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/grades/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"grades",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update part of grade",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"description\": \"grade_description\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/grades/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"grades",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update grade",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"grade\": 4.0,\r\n    \"weight\": 2,\r\n    \"description\": \"grade_description_updated\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/courses/1/participants/1/grades/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"courses",
+						"1",
+						"participants",
+						"1",
+						"grades",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get grades",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/grades",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"grades"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get grade from participant",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/participants/1/grades/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"participants",
+						"1",
+						"grades",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get course grades from participant",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/participants/1/courses/1/grades",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"participants",
+						"1",
+						"courses",
+						"1",
+						"grades"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get grades from participant",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/participants/1/grades",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"participants",
+						"1",
+						"grades"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get grade from tutor",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/courses/1/participants/1/grades/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"courses",
+						"1",
+						"participants",
+						"1",
+						"grades",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get grades from tutor",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/courses/1/participants/1/grades",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"courses",
+						"1",
+						"participants",
+						"1",
+						"grades"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete grade from tutor",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/courses/1/participants/1/grades/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"courses",
+						"1",
+						"participants",
+						"1",
+						"grades",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete participant from course",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/courses/1/participants/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"courses",
+						"1",
+						"participants",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete participants from course",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/courses/1/participants",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"courses",
+						"1",
+						"participants"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete tutor from course",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/courses/1/tutors",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"courses",
+						"1",
+						"tutors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete grade",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/grades/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"grades",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete grades",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/grades",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"grades"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete participant",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/participants/3",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"participants",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete participants",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/participants",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"participants"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete tutor",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/tutors/3",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"tutors",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete tutors",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/tutors",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"tutors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete course",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/courses/3",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"courses",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete courses",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/courses",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"courses"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

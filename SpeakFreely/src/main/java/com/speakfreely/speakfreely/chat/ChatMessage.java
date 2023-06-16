@@ -1,6 +1,9 @@
 package com.speakfreely.speakfreely.chat;
 
-import javax.persistence.*;
+
+import com.speakfreely.speakfreely.model.Course;
+import com.speakfreely.speakfreely.model.Tutor;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 // reprezentuje wiadomość czatu
@@ -16,6 +19,14 @@ public class ChatMessage {
 
     @Column(nullable = false)
     private LocalDateTime timestamp;
+
+    @ManyToOne // Określ relację z polem course
+    @JoinColumn(name = "course_id") // Określ nazwę kolumny, która reprezentuje relację
+    private Course course;
+
+    @ManyToOne
+    @JoinColumn(name = "tutor_id")
+    private Tutor tutor;
 
     // Getters and setters
 
@@ -42,4 +53,21 @@ public class ChatMessage {
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
+
+    public Course getCourse() {
+        return course;
+    }
+
+    public void setCourse(Course course) {
+        this.course = course;
+    }
+
+    public Tutor getTutor() {
+        return tutor;
+    }
+
+    public void setTutor(Tutor tutor) {
+        this.tutor = tutor;
+    }
+
 }

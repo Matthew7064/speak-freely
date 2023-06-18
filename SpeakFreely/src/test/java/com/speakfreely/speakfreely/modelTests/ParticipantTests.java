@@ -37,7 +37,8 @@ public class ParticipantTests {
         participant.setCourses(courses);
 
         grade.setParticipant(participant);
-        course.getEnrolledParticipants().add(participant);
+        course.enrollParticipant(participant);
+//        course.getEnrolledParticipants().add(participant);
     }
 
     @Test

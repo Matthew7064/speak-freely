@@ -2,6 +2,7 @@ package com.speakfreely.speakfreely.chat;
 
 
 import com.speakfreely.speakfreely.model.Course;
+import com.speakfreely.speakfreely.model.Participant;
 import com.speakfreely.speakfreely.model.Tutor;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -28,6 +29,10 @@ public class ChatMessage {
     @JoinColumn(name = "tutor_id")
     private Tutor tutor;
 
+    @ManyToOne
+    private Participant sender;
+
+
     // Getters and setters
 
     public Long getId() {
@@ -36,14 +41,6 @@ public class ChatMessage {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
     }
 
     public LocalDateTime getTimestamp() {
@@ -70,4 +67,12 @@ public class ChatMessage {
         this.tutor = tutor;
     }
 
+    public void setSender(Participant sender) {this.sender = sender;}
+
+    public Participant getSender() { return sender;}
+
+    public String getMessage() {
+        return content;
+    }
+    public void setMessage(String message) {this.content = message;}
 }

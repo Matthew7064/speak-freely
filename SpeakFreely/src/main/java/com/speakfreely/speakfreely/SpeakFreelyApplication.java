@@ -14,13 +14,12 @@ public class SpeakFreelyApplication {
         SpringApplication.run(SpeakFreelyApplication.class, args);
     }
 
-    /*
-    @Bean
-    public ServerEndpointExporter serverEndpointExporter() {
-        return new ServerEndpointExporter();
-    }
 
-     */
+//    @Bean
+//    public ServerEndpointExporter serverEndpointExporter() {
+//        return new ServerEndpointExporter();
+//    }
+
 
 }
 

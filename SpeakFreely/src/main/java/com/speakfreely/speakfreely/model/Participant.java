@@ -3,6 +3,8 @@ package com.speakfreely.speakfreely.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -27,6 +29,11 @@ public class Participant {
 
     private boolean payment;
 
+    public Participant(){
+        this.grades = Collections.emptyList();
+        courses = new ArrayList<>();
+    }
+
     public void receiveGrade(Grade grade) {
         this.grades.add(grade);
     }
@@ -40,7 +47,13 @@ public class Participant {
     }
 
     public Long getId() {
-        return id;
+        if (id == null) return 0L;
+        else return id;
+    }
+
+    //Needed for testing
+    public void setId(Long id){
+        this.id = id;
     }
 
     public String getName() {

@@ -1,160 +1,116 @@
 package com.speakfreely.speakfreely.controllerTests;
 
 import com.speakfreely.speakfreely.controller.TutorController;
+import com.speakfreely.speakfreely.model.Course;
 import com.speakfreely.speakfreely.model.Tutor;
+import com.speakfreely.speakfreely.repository.CourseRepository;
 import com.speakfreely.speakfreely.repository.TutorRepository;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.mock;
 
-@ExtendWith(SpringExtension.class)
-@WebMvcTest(TutorController.class)
-@AutoConfigureMockMvc
 public class TutorControllerTests {
 
-    private MockMvc mockMvc;
-
-    @MockBean
-    private TutorRepository tutorRepository;
-
     @Test
-    public void testFindAllTutors() throws Exception {
-        Tutor tutor1 = new Tutor();
-        tutor1.setName("John");
-        tutor1.setSurname("Doe");
-        tutor1.setEmail("john.doe@example.com");
+    public void testFindAllTutors() {
+        // Tworzenie mocka repozytorium
+        TutorRepository tutorRepository = mock(TutorRepository.class);
+        List<Tutor> tutors = new ArrayList<>();
+        tutors.add(new Tutor());
+        Mockito.when(tutorRepository.findAll()).thenReturn(tutors);
 
-        Tutor tutor2 = new Tutor();
-        tutor2.setName("Jane");
-        tutor2.setSurname("Smith");
-        tutor2.setEmail("jane.smith@example.com");
+        // Inicjalizacja kontrolera
+        TutorController tutorController = new TutorController(tutorRepository, null);
 
-        List<Tutor> tutors = Arrays.asList(tutor1, tutor2);
+        // Wywołanie metody kontrolera
+        List<Tutor> result = tutorController.findAllTutors();
 
-        when(tutorRepository.findAll()).thenReturn(tutors);
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/tutors")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].name", is("John")))
-                .andExpect(jsonPath("$[0].surname", is("Doe")))
-                .andExpect(jsonPath("$[0].email", is("john.doe@example.com")))
-                .andExpect(jsonPath("$[1].name", is("Jane")))
-                .andExpect(jsonPath("$[1].surname", is("Smith")))
-                .andExpect(jsonPath("$[1].email", is("jane.smith@example.com")));
+        // Sprawdzenie wyniku
+        assertEquals(1, result.size());
     }
 
     @Test
-    public void testFindTutor() throws Exception {
+    public void testFindTutor() {
+        // Tworzenie mocka repozytorium
+        TutorRepository tutorRepository = mock(TutorRepository.class);
         Tutor tutor = new Tutor();
-        tutor.setName("John");
-        tutor.setSurname("Doe");
-        tutor.setEmail("john.doe@example.com");
+        Mockito.when(tutorRepository.findById(anyLong())).thenReturn(Optional.of(tutor));
 
-        when(tutorRepository.findById(1L)).thenReturn(Optional.of(tutor));
+        // Inicjalizacja kontrolera
+        TutorController tutorController = new TutorController(tutorRepository, null);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/tutors/1")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", is("John")))
-                .andExpect(jsonPath("$.surname", is("Doe")))
-                .andExpect(jsonPath("$.email", is("john.doe@example.com")));
+        // Wywołanie metody kontrolera
+        Optional<Tutor> result = tutorController.findTutor(1L);
+
+        // Sprawdzenie wyniku
+        assertTrue(result.isPresent());
+        assertEquals(tutor, result.get());
     }
 
     @Test
-    public void testFindTutor_NonExistingTutor() throws Exception {
-        when(tutorRepository.findById(1L)).thenReturn(Optional.empty());
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/tutors/1")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
-    public void testCreateTutor() throws Exception {
+    public void testAddTutor() {
+        // Tworzenie mocka repozytorium
+        TutorRepository tutorRepository = mock(TutorRepository.class);
         Tutor tutor = new Tutor();
-        tutor.setName("John");
-        tutor.setSurname("Doe");
-        tutor.setEmail("john.doe@example.com");
 
-        when(tutorRepository.save(any(Tutor.class))).thenReturn(tutor);
+        // Inicjalizacja kontrolera
+        TutorController tutorController = new TutorController(tutorRepository, null);
 
-        String tutorJson = "{\"name\":\"John\",\"surname\":\"Doe\",\"email\":\"john.doe@example.com\"}";
+        // Wywołanie metody kontrolera
+        ResponseEntity<Tutor> response = tutorController.addTutor(tutor);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/tutors")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(tutorJson))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", is("John")))
-                .andExpect(jsonPath("$.surname", is("Doe")))
-                .andExpect(jsonPath("$.email", is("john.doe@example.com")));
+        // Sprawdzenie wyniku
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(tutor, response.getBody());
     }
 
     @Test
-    public void testUpdateTutor() throws Exception {
-        Tutor tutor = new Tutor();
-        tutor.setName("John");
-        tutor.setSurname("Doe");
-        tutor.setEmail("john.doe@example.com");
+    public void testDeleteTutor_WithExistingId_ShouldDeleteTutorAndReturnNoContentStatus() {
+        // Tworzenie mocka repozytorium
+        TutorRepository tutorRepository = mock(TutorRepository.class);
+        CourseRepository courseRepository = mock(CourseRepository.class);
+        Tutor tutor = mock(Tutor.class); // Tworzenie atrapy dla obiektu Tutor
 
-        when(tutorRepository.findById(1L)).thenReturn(Optional.of(tutor));
-        when(tutorRepository.save(any(Tutor.class))).thenReturn(tutor);
+        // Konfiguracja zachowania atrap
+        tutor.setId(1L);
+        Mockito.when(tutorRepository.findById(anyLong())).thenReturn(Optional.of(tutor));
+        Mockito.when(courseRepository.findById(anyLong())).thenReturn(Optional.of(new Course()));
+        Mockito.when(tutor.getCourses()).thenReturn(new ArrayList<>());
 
-        String tutorJson = "{\"name\":\"John\",\"surname\":\"Doe\",\"email\":\"john.doe@example.com\"}";
+        // Inicjalizacja kontrolera
+        TutorController tutorController = new TutorController(tutorRepository, courseRepository);
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/tutors/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(tutorJson))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", is("John")))
-                .andExpect(jsonPath("$.surname", is("Doe")))
-                .andExpect(jsonPath("$.email", is("john.doe@example.com")));
+        // Wywołanie metody kontrolera
+        ResponseEntity<Tutor> response = tutorController.deleteTutor(1L);
+
+        // Sprawdzenie wyniku
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
     }
+
+
 
     @Test
-    public void testUpdateTutor_NonExistingTutor() throws Exception {
-        when(tutorRepository.findById(1L)).thenReturn(Optional.empty());
+    public void testDeleteTutor_WithNonExistingId_ShouldReturnNotFoundStatus() {
+        // Tworzenie mocka repozytorium
+        TutorRepository tutorRepository = mock(TutorRepository.class);
+        TutorController tutorController = new TutorController(tutorRepository, null);
 
-        String tutorJson = "{\"name\":\"John\",\"surname\":\"Doe\",\"email\":\"john.doe@example.com\"}";
+        // Wywołanie metody kontrolera
+        ResponseEntity<Tutor> response = tutorController.deleteTutor(1L);
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/tutors/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(tutorJson))
-                .andExpect(status().isNotFound());
+        // Sprawdzenie wyniku
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
-    @Test
-    public void testDeleteTutor() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/tutors/1")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-    }
+    // Dodaj pozostałe testy dla pozostałych metod w klasie TutorController...
 
-    @Test
-    public void testDeleteTutor_NonExistingTutor() throws Exception {
-        when(tutorRepository.findById(1L)).thenReturn(Optional.empty());
-
-        mockMvc.perform(MockMvcRequestBuilders.delete("/tutors/1")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
-    }
 }

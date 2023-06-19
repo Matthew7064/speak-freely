@@ -27,6 +27,7 @@ public class ParticipantTests {
         participant.setSurname("Doe");
         participant.setEmail("john.doe@example.com");
         participant.setPayment(true);
+        participant.setId(1L);
 
         List<Grade> grades = new ArrayList<>();
         grades.add(grade);
@@ -37,8 +38,8 @@ public class ParticipantTests {
         participant.setCourses(courses);
 
         grade.setParticipant(participant);
+        course.setEnrolledParticipants(new ArrayList<>()); // Inicjalizacja listy enrolledParticipants
         course.enrollParticipant(participant);
-//        course.getEnrolledParticipants().add(participant);
     }
 
     @Test

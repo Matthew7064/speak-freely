@@ -1,13 +1,12 @@
 package com.speakfreely.speakfreely.chat;
 
-
 import com.speakfreely.speakfreely.model.Course;
 import com.speakfreely.speakfreely.model.Participant;
 import com.speakfreely.speakfreely.model.Tutor;
+
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-// reprezentuje wiadomość czatu
 @Entity
 @Table(name = "chat_messages")
 public class ChatMessage {
@@ -21,8 +20,8 @@ public class ChatMessage {
     @Column(nullable = false)
     private LocalDateTime timestamp;
 
-    @ManyToOne // Określ relację z polem course
-    @JoinColumn(name = "course_id") // Określ nazwę kolumny, która reprezentuje relację
+    @ManyToOne
+    @JoinColumn(name = "course_id")
     private Course course;
 
     @ManyToOne
@@ -30,10 +29,20 @@ public class ChatMessage {
     private Tutor tutor;
 
     @ManyToOne
+    @JoinColumn(name = "participant_id")
     private Participant sender;
 
+    public ChatMessage() {
+        // Konstruktor bezargumentowy
+    }
 
-    // Getters and setters
+    public ChatMessage(String content, LocalDateTime timestamp, Course course, Tutor tutor, Participant sender) {
+        this.content = content;
+        this.timestamp = timestamp;
+        this.course = course;
+        this.tutor = tutor;
+        this.sender = sender;
+    }
 
     public Long getId() {
         return id;
@@ -41,6 +50,14 @@ public class ChatMessage {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public LocalDateTime getTimestamp() {
@@ -67,12 +84,11 @@ public class ChatMessage {
         this.tutor = tutor;
     }
 
-    public void setSender(Participant sender) {this.sender = sender;}
-
-    public Participant getSender() { return sender;}
-
-    public String getMessage() {
-        return content;
+    public Participant getSender() {
+        return sender;
     }
-    public void setMessage(String message) {this.content = message;}
+
+    public void setSender(Participant sender) {
+        this.sender = sender;
+    }
 }

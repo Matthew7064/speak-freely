@@ -24,7 +24,7 @@ public class ChatService {
         ChatMessage chatMessage = new ChatMessage();
         chatMessage.setSender(sender);
         chatMessage.setCourse(course);
-        chatMessage.setMessage(message);
+        chatMessage.setContent(message);
         chatMessage.setTimestamp(LocalDateTime.now());
 
         ChatRepository.save(chatMessage);
@@ -34,7 +34,7 @@ public class ChatService {
         ChatMessage chatMessage = new ChatMessage();
         chatMessage.setSender(sender);
         chatMessage.setTutor(tutor);
-        chatMessage.setMessage(message);
+        chatMessage.setContent(message);
         chatMessage.setTimestamp(LocalDateTime.now());
 
         ChatRepository.save(chatMessage);

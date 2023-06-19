@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/chat")
@@ -39,9 +41,17 @@ public class ChatController {
 
     @GetMapping("/messages/course/{courseId}")
     public List<ChatMessage> getMessagesByCourse(@PathVariable Long courseId) {
-        Course course = chatRepository.getOne(courseId).getCourse();
-        return chatRepository.findByCourse(course);
+        Optional<ChatMessage> optionalChatMessage = chatRepository.findById(courseId);
+        if (optionalChatMessage.isPresent()) {
+            ChatMessage chatMessage = optionalChatMessage.get();
+            Course course = chatMessage.getCourse();
+            return chatRepository.findByCourse(course);
+        } else {
+            // Obsłuż tutaj przypadek, gdy nie ma wiadomości czatu o podanym courseId
+            return Collections.emptyList(); // Zwróć pustą listę lub inny odpowiedni wynik
+        }
     }
+
 
     @GetMapping("/messages/tutor/{tutorId}")
     public List<ChatMessage> getMessagesByTutor(@PathVariable Long tutorId) {

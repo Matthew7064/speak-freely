@@ -56,15 +56,21 @@ public class CourseController {
     //@PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Course> deleteCourse(@PathVariable("id") Long id) {
-        Optional<Course> course = courseRepository.findById(id);
-        if (course.isEmpty()) {
-            System.out.println("Attempt to delete non existing course.");
+        Optional<Course> optionalCourse = courseRepository.findById(id);
+        if (optionalCourse.isEmpty()) {
+            System.out.println("Attempt to delete non-existing course.");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        course.get().getGrades().stream().
-                mapToLong(Grade::getId).forEach(gradeRepository::deleteById);
-        course.get().deleteParticipants();
-        course.get().deleteTutor();
+
+        Course course = optionalCourse.get();
+        List<Grade> grades = course.getGrades();
+        if (grades != null) {
+            grades.stream()
+                    .mapToLong(Grade::getId)
+                    .forEach(gradeRepository::deleteById);
+        }
+        course.deleteParticipants();
+        course.deleteTutor();
         courseRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

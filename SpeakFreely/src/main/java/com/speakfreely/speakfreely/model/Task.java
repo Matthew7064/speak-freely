@@ -51,9 +51,11 @@ public class Task {
         this.flashCards = flashCards;
     }
 
-    public void removeFlashCard(FlashCard flashCard){
+    public void removeFlashCard(FlashCard flashCard) {
+        flashCard.setTask(null);
         this.flashCards.remove(flashCard);
     }
+
 
     public void addFlashCard(FlashCard flashCard) {
         this.flashCards.add(flashCard);

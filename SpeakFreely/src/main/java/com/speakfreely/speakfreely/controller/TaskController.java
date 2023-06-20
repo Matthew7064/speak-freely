@@ -1,5 +1,7 @@
 package com.speakfreely.speakfreely.controller;
 
+import com.speakfreely.speakfreely.model.Grade;
+import com.speakfreely.speakfreely.model.Task;
 import com.speakfreely.speakfreely.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,5 +25,10 @@ public class TaskController {
         this.flashCardRepository = flashCardRepository;
     }
 
+    //@PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/tasks")
+    public List<Task> findAllTasks() {
+        return taskRepository.findAll();
+    }
 
 }

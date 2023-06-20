@@ -1,4 +1,5 @@
 package com.speakfreely.speakfreely.controllerTests;
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
@@ -11,6 +12,8 @@ import com.speakfreely.speakfreely.repository.CourseRepository;
 import com.speakfreely.speakfreely.repository.TutorRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.Collections;
@@ -29,6 +32,8 @@ class ChatControllerTest {
     void setUp() {
         chatRepository = mock(ChatRepository.class);
         messagingTemplate = mock(SimpMessagingTemplate.class);
+        courseRepository = mock(CourseRepository.class);
+        tutorRepository = mock(TutorRepository.class);
         chatController = new ChatController(chatRepository, messagingTemplate, courseRepository, tutorRepository);
     }
 
@@ -49,19 +54,24 @@ class ChatControllerTest {
     void getMessagesByCourse_ShouldReturnMessagesForCourse() {
         // Given
         Long courseId = 1L;
-        ChatMessage chatMessage = new ChatMessage();
         Course course = new Course();
-        chatMessage.setCourse(course);
-        when(chatRepository.findById(courseId)).thenReturn(Optional.of(chatMessage));
-        when(chatRepository.findByCourse(course)).thenReturn(Collections.singletonList(chatMessage));
+        when(courseRepository.findById(courseId)).thenReturn(Optional.of(course));
+        ChatMessage chatMessage1 = new ChatMessage();
+        chatMessage1.setCourse(course);
+        ChatMessage chatMessage2 = new ChatMessage();
+        chatMessage2.setCourse(course);
+        List<ChatMessage> expectedMessages = List.of(chatMessage1, chatMessage2);
+        when(chatRepository.findByCourse(course)).thenReturn(expectedMessages);
 
         // When
-        List<ChatMessage> messages = (List<ChatMessage>) chatController.getMessagesByCourse(courseId);
+        ResponseEntity<List<ChatMessage>> response = chatController.getMessagesByCourse(courseId);
 
         // Then
-        verify(chatRepository).findById(courseId);
-        verify(chatRepository).findByCourse(course);
-        // Additional assertions for messages if needed
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        List<ChatMessage> actualMessages = response.getBody();
+        assertNotNull(actualMessages);
+        assertEquals(expectedMessages.size(), actualMessages.size());
+        assertTrue(actualMessages.containsAll(expectedMessages));
     }
 
     @Test

@@ -16,10 +16,10 @@ public class SpeakFreelyApplication {
     }
 
 
-    @Bean
-    public ServerEndpointExporter serverEndpointExporter() {
-        return new ServerEndpointExporter();
-    }
+    //@Bean
+    //public ServerEndpointExporter serverEndpointExporter() {
+        //return new ServerEndpointExporter();
+   // }
 
 
 }

@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController
 //@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
@@ -18,12 +17,15 @@ public class TaskController {
     private final TaskRepository taskRepository;
     private final FlashCardRepository flashCardRepository;
     private final GradeRepository gradeRepository;
+    private final ParticipantRepository participantRepository;
 
     @Autowired
-    public TaskController(TaskRepository taskRepository, FlashCardRepository flashCardRepository, GradeRepository gradeRepository) {
+    public TaskController(TaskRepository taskRepository, FlashCardRepository flashCardRepository,
+                          GradeRepository gradeRepository, ParticipantRepository participantRepository) {
         this.taskRepository = taskRepository;
         this.flashCardRepository = flashCardRepository;
         this.gradeRepository = gradeRepository;
+        this.participantRepository = participantRepository;
     }
 
     //@PreAuthorize("hasRole('ADMIN')")
@@ -156,7 +158,6 @@ public class TaskController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         task.get().addFlashCard(flashCard);
-        taskRepository.save(task.get());
         flashCardRepository.save(flashCard);
         return new ResponseEntity<>(flashCard, HttpStatus.CREATED);
     }
@@ -203,6 +204,36 @@ public class TaskController {
         }
         flashCardRepository.save(updatedFlashCard);
         return new ResponseEntity<>(updatedFlashCard, HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("/{taskId}/flash-cards/grade-participant/{participantId}")
+    public ResponseEntity<Grade> gradeFlashCards(@PathVariable Long taskId, @PathVariable Long participantId, @RequestBody List<FlashCard> submittedFlashCards){
+        Optional<Task> task = taskRepository.findById(taskId);
+        Optional<Participant> participant = participantRepository.findById(participantId);
+        if(task.isEmpty() || participant.isEmpty()){
+            System.out.println("Grade flash card from task: attempt to use non existing task or participant");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        List<FlashCard> flashCards = task.get().getFlashCards();
+        long wrongFlashCards = submittedFlashCards.stream().filter(submittedFlashCard -> flashCards.stream().noneMatch(flashCard ->
+                (flashCard.getKey().equals(submittedFlashCard.getKey()) &&
+                        flashCard.getValue().equals(submittedFlashCard.getValue())))).count();
+        float gradePercentage = 1 - ((float)wrongFlashCards/submittedFlashCards.size());
+        Grade baseGrade = task.get().getGrade();
+        if (baseGrade == null){
+            System.out.println("Grade flash card from task: cannot grade from task without a grade");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        Grade scaledGrade = new Grade();
+        scaledGrade.setGrade(baseGrade.getGrade() * gradePercentage);
+        scaledGrade.setCourse(task.get().getCourse());
+        scaledGrade.setDescription(baseGrade.getDescription());
+        scaledGrade.setWeight(baseGrade.getWeight());
+        scaledGrade.setDate(new Date());
+        scaledGrade.setParticipant(participant.get());
+        participant.get().receiveGrade(scaledGrade);
+        gradeRepository.save(scaledGrade);
+        return new ResponseEntity<>(scaledGrade, HttpStatus.OK);
     }
 
 }

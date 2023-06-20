@@ -86,6 +86,5 @@ public class CourseRepositoryTests {
         Optional<Course> foundCourse = courseRepository.findById(course1.getId());
         assertFalse(foundCourse.isPresent());
     }
-
  */
 }

@@ -1,5 +1,6 @@
 package com.speakfreely.speakfreely.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.speakfreely.speakfreely.model.Course;
 import com.speakfreely.speakfreely.model.Participant;
 import com.speakfreely.speakfreely.model.Tutor;
@@ -12,20 +13,25 @@ import java.time.LocalDateTime;
 public class ChatMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty
     private Long id;
 
     @Column(nullable = false)
+    @JsonProperty
     private String content;
 
     @Column(nullable = false)
+    @JsonProperty
     private LocalDateTime timestamp;
 
     @ManyToOne
     @JoinColumn(name = "course_id")
+    @JsonProperty
     private Course course;
 
     @ManyToOne
     @JoinColumn(name = "tutor_id")
+    @JsonProperty
     private Tutor tutor;
 
     @ManyToOne

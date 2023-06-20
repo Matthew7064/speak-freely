@@ -6,16 +6,16 @@ import com.speakfreely.speakfreely.repository.CourseRepository;
 import com.speakfreely.speakfreely.repository.TutorRepository;
 import com.speakfreely.speakfreely.model.Course;
 import com.speakfreely.speakfreely.model.Tutor;
+import com.theokanning.openai.completion.CompletionRequest;
+import com.theokanning.openai.completion.CompletionResult;
+import com.theokanning.openai.service.OpenAiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +26,9 @@ public class ChatController {
     private final SimpMessagingTemplate messagingTemplate;
     private final CourseRepository courseRepository;
     private final TutorRepository tutorRepository;
+
+//    @Autowired
+//    private ChatGPT chatGPT;
 
     @Autowired
     public ChatController(ChatRepository chatRepository, SimpMessagingTemplate messagingTemplate,
@@ -81,15 +84,6 @@ public class ChatController {
         }
     }
 
-    @MessageMapping("/chat")
-    public void processMessage(@Payload ChatMessage chatMessage) {
-        // Zapisz wiadomość czatu w repozytorium
-        chatRepository.save(chatMessage);
-
-        // Wysyłanie wiadomości do subskrybentów
-        messagingTemplate.convertAndSend("/topic/chat", chatMessage);
-    }
-
     @GetMapping("/messages/course/{courseId}")
     @ResponseBody
     public ResponseEntity<List<ChatMessage>> getMessagesByCourse(@PathVariable Long courseId) {
@@ -110,4 +104,30 @@ public class ChatController {
         Tutor tutor = chatRepository.getOne(tutorId).getTutor();
         return chatRepository.findByTutor(tutor);
     }
+
+    @PostMapping("/chatGPT")
+    public void processMessage(@RequestBody String prompt) {
+        System.out.print(prompt);
+        ChatMessage chatMessage = new ChatMessage(prompt, LocalDateTime.now(),null,null,null);
+        chatRepository.save(chatMessage);
+
+        OpenAiService service = new OpenAiService("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");
+        CompletionRequest completionRequest = CompletionRequest.builder()
+                .prompt(prompt)
+                .model("ada")
+                .echo(true)
+                .build();
+        CompletionResult completionResult = service.createCompletion(completionRequest);
+        String response = completionResult.getChoices().toString();
+
+        ChatMessage responseMessage = new ChatMessage();
+        responseMessage.setContent(response);
+        responseMessage.setTimestamp(LocalDateTime.now());
+        responseMessage.setCourse(chatMessage.getCourse()); // Ustaw wartość course na obiekcie responseMessage
+        responseMessage.setTutor(chatMessage.getTutor()); // Ustaw wartość tutor na obiekcie responseMessage
+
+        // Zapisz wiadomość odpowiedzi w repozytorium
+        chatRepository.save(responseMessage);
+    }
+
 }

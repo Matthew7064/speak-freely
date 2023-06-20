@@ -3,6 +3,7 @@ package com.speakfreely.speakfreely.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,6 +26,10 @@ public class Task {
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "course_id", referencedColumnName = "id")
     private Course course;
+
+    public Task() {
+        this.flashCards = new ArrayList<>();
+    }
 
     public Long getId() {
         return id;
@@ -50,8 +55,9 @@ public class Task {
         this.flashCards.remove(flashCard);
     }
 
-    public void addFlashCard(FlashCard flashCard){
+    public void addFlashCard(FlashCard flashCard) {
         this.flashCards.add(flashCard);
+        flashCard.setTask(this);
     }
 
     public Grade getGrade() {

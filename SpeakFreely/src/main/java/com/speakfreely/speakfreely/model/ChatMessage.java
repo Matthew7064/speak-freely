@@ -1,12 +1,12 @@
-package com.speakfreely.speakfreely.chat;
-
+package com.speakfreely.speakfreely.model;
 
 import com.speakfreely.speakfreely.model.Course;
+import com.speakfreely.speakfreely.model.Participant;
 import com.speakfreely.speakfreely.model.Tutor;
+
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-// reprezentuje wiadomość czatu
 @Entity
 @Table(name = "chat_messages")
 public class ChatMessage {
@@ -20,15 +20,29 @@ public class ChatMessage {
     @Column(nullable = false)
     private LocalDateTime timestamp;
 
-    @ManyToOne // Określ relację z polem course
-    @JoinColumn(name = "course_id") // Określ nazwę kolumny, która reprezentuje relację
+    @ManyToOne
+    @JoinColumn(name = "course_id")
     private Course course;
 
     @ManyToOne
     @JoinColumn(name = "tutor_id")
     private Tutor tutor;
 
-    // Getters and setters
+    @ManyToOne
+    @JoinColumn(name = "participant_id")
+    private Participant sender;
+
+    public ChatMessage() {
+        // Konstruktor bezargumentowy
+    }
+
+    public ChatMessage(String content, LocalDateTime timestamp, Course course, Tutor tutor, Participant sender) {
+        this.content = content;
+        this.timestamp = timestamp;
+        this.course = course;
+        this.tutor = tutor;
+        this.sender = sender;
+    }
 
     public Long getId() {
         return id;
@@ -70,4 +84,11 @@ public class ChatMessage {
         this.tutor = tutor;
     }
 
+    public Participant getSender() {
+        return sender;
+    }
+
+    public void setSender(Participant sender) {
+        this.sender = sender;
+    }
 }

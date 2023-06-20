@@ -36,7 +36,7 @@ public class Course {
     public void enrollParticipant(Participant participant) {
         boolean canAdd = true;
         for(Participant iParticipant: enrolledParticipants) {
-            if (iParticipant.getId() == participant.getId()) canAdd = false;
+            if (participant.getId().equals(iParticipant.getId())) canAdd = false;
         }
         if (canAdd) enrolledParticipants.add(participant);
     }
@@ -62,7 +62,9 @@ public class Course {
     }
 
     public void deleteParticipants() {
-        this.enrolledParticipants.clear();
+        if (enrolledParticipants != null) {
+            this.enrolledParticipants.clear();
+        }
     }
 
     public void deleteParticipant(Participant participant) {

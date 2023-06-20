@@ -28,6 +28,7 @@ public class CourseTests {
 
         course.setName("English");
         course.setDescription("Learn English language");
+        course.setEnrolledParticipants(new ArrayList<>());
         course.setEnrolledParticipants(participants);
         course.setGrades(grades);
         course.setTutor(tutor);
@@ -124,14 +125,16 @@ public class CourseTests {
     @Test
     public void testDeleteParticipant() {
         Participant participant1 = new Participant();
+        participant1.setId(1L);
         Participant participant2 = new Participant();
-        course.enrollParticipant(participant1);
-        course.enrollParticipant(participant2);
+        participant2.setId(2L);
+        participants.add(participant1);
+        participants.add(participant2);
 
-        // Delete a specific participant from the course
+        // Act
         course.deleteParticipant(participant1);
 
-        // Check if the participant is deleted
+        // Assert
         assertFalse(course.getEnrolledParticipants().contains(participant1));
         assertTrue(course.getEnrolledParticipants().contains(participant2));
     }

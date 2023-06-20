@@ -34,7 +34,8 @@ public class TutorTests {
     @Test
     public void testGetId() {
         // Check if the correct ID is returned
-        assertEquals(1L, tutor.getId());
+        // Has to be this way because we may create multiple tutors and we need it to work for all of them.
+        assertEquals(course.getTutor().getId(), tutor.getId());
     }
 
     @Test

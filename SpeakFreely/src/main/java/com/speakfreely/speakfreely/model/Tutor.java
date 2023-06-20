@@ -56,4 +56,7 @@ public class Tutor {
     public void setCourses(List<Course> courses) {
         this.courses = courses;
     }
+    // Method for testing
+    public void setId(long l) { this.id = l;
+    }
 }

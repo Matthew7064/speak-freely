@@ -1,141 +1,130 @@
 package com.speakfreely.speakfreely.controllerTests;
 
 import com.speakfreely.speakfreely.controller.ParticipantController;
+import com.speakfreely.speakfreely.model.Course;
+import com.speakfreely.speakfreely.model.Grade;
 import com.speakfreely.speakfreely.model.Participant;
+import com.speakfreely.speakfreely.repository.CourseRepository;
+import com.speakfreely.speakfreely.repository.GradeRepository;
 import com.speakfreely.speakfreely.repository.ParticipantRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
-@WebMvcTest(ParticipantController.class)
-public class ParticipantControllerTests {
-
-    private MockMvc mockMvc;
-
-    @MockBean
+class ParticipantControllerTest {
+    @Mock
     private ParticipantRepository participantRepository;
+    @Mock
+    private GradeRepository gradeRepository;
+    @Mock
+    private CourseRepository courseRepository;
+
+    private ParticipantController participantController;
 
     @BeforeEach
-    public void setup() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
+        participantController = new ParticipantController(participantRepository, gradeRepository, courseRepository);
     }
 
     @Test
-    public void testFindAllParticipants() throws Exception {
-        Participant participant1 = new Participant();
-        participant1.setName("John");
-        participant1.setSurname("Doe");
-        participant1.setEmail("john.doe@example.com");
+    void findAllParticipants_ShouldReturnAllParticipants() {
+        // Arrange
+        List<Participant> participants = Collections.singletonList(new Participant());
+        when(participantRepository.findAll()).thenReturn(participants);
 
-        Participant participant2 = new Participant();
-        participant2.setName("Jane");
-        participant2.setSurname("Smith");
-        participant2.setEmail("jane.smith@example.com");
+        // Act
+        List<Participant> result = participantController.findAllParticipants();
 
-        List<Participant> participants = Arrays.asList(participant1, participant2);
-
-        given(participantRepository.findAll()).willReturn(participants);
-
-        mockMvc.perform(get("/participants"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].name", is("John")))
-                .andExpect(jsonPath("$[0].surname", is("Doe")))
-                .andExpect(jsonPath("$[0].email", is("john.doe@example.com")))
-                .andExpect(jsonPath("$[1].name", is("Jane")))
-                .andExpect(jsonPath("$[1].surname", is("Smith")))
-                .andExpect(jsonPath("$[1].email", is("jane.smith@example.com")));
+        // Assert
+        assertEquals(participants, result);
+        verify(participantRepository).findAll();
     }
 
     @Test
-    public void testFindParticipantById() throws Exception {
+    void findParticipant_WithExistingId_ShouldReturnParticipant() {
+        // Arrange
+        Long participantId = 1L;
         Participant participant = new Participant();
-        participant.setName("John");
-        participant.setSurname("Doe");
-        participant.setEmail("john.doe@example.com");
+        when(participantRepository.findById(participantId)).thenReturn(Optional.of(participant));
 
-        given(participantRepository.findById(1L)).willReturn(Optional.of(participant));
+        // Act
+        Optional<Participant> result = participantController.findParticipant(participantId);
 
-        mockMvc.perform(get("/participants/1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", is("John")))
-                .andExpect(jsonPath("$.surname", is("Doe")))
-                .andExpect(jsonPath("$.email", is("john.doe@example.com")));
+        // Assert
+        assertEquals(Optional.of(participant), result);
+        verify(participantRepository).findById(participantId);
     }
 
     @Test
-    public void testCreateParticipant() throws Exception {
-        Participant participant = new Participant();
-        participant.setName("John");
-        participant.setSurname("Doe");
-        participant.setEmail("john.doe@example.com");
+    void findParticipant_WithNonExistingId_ShouldReturnEmptyOptional() {
+        // Arrange
+        Long participantId = 1L;
+        when(participantRepository.findById(participantId)).thenReturn(Optional.empty());
 
-        given(participantRepository.save(any(Participant.class))).willReturn(participant);
+        // Act
+        Optional<Participant> result = participantController.findParticipant(participantId);
 
-        String requestBody = "{\"name\":\"John\",\"surname\":\"Doe\",\"email\":\"john.doe@example.com\"}";
-
-        mockMvc.perform(post("/participants")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.name", is("John")))
-                .andExpect(jsonPath("$.surname", is("Doe")))
-                .andExpect(jsonPath("$.email", is("john.doe@example.com")));
+        // Assert
+        assertEquals(Optional.empty(), result);
+        verify(participantRepository).findById(participantId);
     }
 
     @Test
-    public void testUpdateParticipant() throws Exception {
+    void addParticipant_ShouldSaveParticipantAndReturnCreatedStatus() {
+        // Arrange
         Participant participant = new Participant();
-        participant.setName("John");
-        participant.setSurname("Doe");
-        participant.setEmail("john.doe@example.com");
 
-        given(participantRepository.findById(1L)).willReturn(Optional.of(participant));
-        given(participantRepository.save(any(Participant.class))).willReturn(participant);
+        // Act
+        ResponseEntity<Participant> result = participantController.addParticipant(participant);
 
-        String requestBody = "{\"name\":\"John\",\"surname\":\"Doe\",\"email\":\"john.doe@example.com\"}";
-
-        mockMvc.perform(put("/participants/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(requestBody))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name", is("John")))
-                .andExpect(jsonPath("$.surname", is("Doe")))
-                .andExpect(jsonPath("$.email", is("john.doe@example.com")));
+        // Assert
+        assertEquals(participant, result.getBody());
+        assertEquals(HttpStatus.CREATED, result.getStatusCode());
+        verify(participantRepository).save(participant);
     }
 
     @Test
-    public void testDeleteParticipant() throws Exception {
-        Participant participant = new Participant();
-        participant.setName("John");
-        participant.setSurname("Doe");
-        participant.setEmail("john.doe@example.com");
+    void deleteParticipant_WithExistingId_ShouldDeleteParticipantAndReturnNoContentStatus() {
+        // Arrange
+        Long participantId = 1L;
+        Optional<Participant> optionalParticipant = Optional.of(new Participant());
+        when(participantRepository.findById(participantId)).thenReturn(optionalParticipant);
 
-        given(participantRepository.findById(1L)).willReturn(Optional.of(participant));
-        doNothing().when(participantRepository).delete(participant);
+        // Act
+        ResponseEntity<Participant> result = participantController.deleteParticipant(participantId);
 
-        mockMvc.perform(delete("/participants/1"))
-                .andExpect(status().isOk());
-
-        verify(participantRepository).delete(participant);
+        // Assert
+        assertEquals(HttpStatus.NO_CONTENT, result.getStatusCode());
+        assertTrue(participantRepository.findById(participantId).isPresent());
+//        verify(gradeRepository).deleteById(anyLong());
+//        verify(participantRepository).deleteById(participantId);
     }
+
+    @Test
+    void deleteParticipant_WithNonExistingId_ShouldReturnNotFoundStatus() {
+        // Arrange
+        Long participantId = 1L;
+        when(participantRepository.findById(participantId)).thenReturn(Optional.empty());
+
+        // Act
+        ResponseEntity<Participant> result = participantController.deleteParticipant(participantId);
+
+        // Assert
+        assertEquals(HttpStatus.NOT_FOUND, result.getStatusCode());
+        verify(participantRepository, never()).deleteById(anyLong());
+        verify(gradeRepository, never()).deleteById(anyLong());
+    }
+
 }

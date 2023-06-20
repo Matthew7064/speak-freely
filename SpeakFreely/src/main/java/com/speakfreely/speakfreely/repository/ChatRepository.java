@@ -1,6 +1,6 @@
-package com.speakfreely.speakfreely.chat;
+package com.speakfreely.speakfreely.repository;
 
-import com.speakfreely.speakfreely.chat.ChatMessage;
+import com.speakfreely.speakfreely.model.ChatMessage;
 import com.speakfreely.speakfreely.model.Course;
 import com.speakfreely.speakfreely.model.Tutor;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,10 +1,10 @@
 package com.speakfreely.speakfreely.chat;
 
-import com.speakfreely.speakfreely.chat.ChatMessage;
+import com.speakfreely.speakfreely.model.ChatMessage;
 import com.speakfreely.speakfreely.model.Course;
 import com.speakfreely.speakfreely.model.Participant;
 import com.speakfreely.speakfreely.model.Tutor;
-import com.speakfreely.speakfreely.chat.ChatRepository;
+import com.speakfreely.speakfreely.repository.ChatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.speakfreely.speakfreely.chat;
+package com.speakfreely.speakfreely.model;
 
 import com.speakfreely.speakfreely.model.Course;
 import com.speakfreely.speakfreely.model.Participant;

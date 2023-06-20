@@ -2,31 +2,34 @@ package com.speakfreely.speakfreely.controllerTests;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-import com.speakfreely.speakfreely.chat.ChatMessage;
-import com.speakfreely.speakfreely.chat.ChatRepository;
+import com.speakfreely.speakfreely.model.ChatMessage;
+import com.speakfreely.speakfreely.repository.ChatRepository;
 import com.speakfreely.speakfreely.controller.ChatController;
 import com.speakfreely.speakfreely.model.Course;
 import com.speakfreely.speakfreely.model.Tutor;
+import com.speakfreely.speakfreely.repository.CourseRepository;
+import com.speakfreely.speakfreely.repository.TutorRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 
 class ChatControllerTest {
-    private ChatRepository chatRepository;
-    private SimpMessagingTemplate messagingTemplate;
+    private  ChatRepository chatRepository;
+    private  SimpMessagingTemplate messagingTemplate;
+    private  CourseRepository courseRepository;
+    private  TutorRepository tutorRepository;
     private ChatController chatController;
 
     @BeforeEach
     void setUp() {
         chatRepository = mock(ChatRepository.class);
         messagingTemplate = mock(SimpMessagingTemplate.class);
-        chatController = new ChatController(chatRepository, messagingTemplate);
+        chatController = new ChatController(chatRepository, messagingTemplate, courseRepository, tutorRepository);
     }
 
     @Test
@@ -53,7 +56,7 @@ class ChatControllerTest {
         when(chatRepository.findByCourse(course)).thenReturn(Collections.singletonList(chatMessage));
 
         // When
-        List<ChatMessage> messages = chatController.getMessagesByCourse(courseId);
+        List<ChatMessage> messages = (List<ChatMessage>) chatController.getMessagesByCourse(courseId);
 
         // Then
         verify(chatRepository).findById(courseId);

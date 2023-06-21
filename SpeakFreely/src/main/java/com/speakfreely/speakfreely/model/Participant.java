@@ -30,7 +30,7 @@ public class Participant {
     private boolean payment;
 
     public Participant(){
-        this.grades = Collections.emptyList();
+        this.grades = new ArrayList<>();
         courses = new ArrayList<>();
     }
 

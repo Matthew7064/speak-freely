@@ -29,10 +29,14 @@ public class Course {
     @JoinColumn(name = "tutor_id", referencedColumnName = "id")
     private Tutor tutor;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "course")
+    private List<Task> tasks;
+
     public void enrollParticipant(Participant participant) {
         boolean canAdd = true;
         for(Participant iParticipant: enrolledParticipants) {
-            if (iParticipant.getId() == participant.getId()) canAdd = false;
+            if (participant.getId().equals(iParticipant.getId())) canAdd = false;
         }
         if (canAdd) enrolledParticipants.add(participant);
     }
@@ -58,7 +62,9 @@ public class Course {
     }
 
     public void deleteParticipants() {
-        this.enrolledParticipants.clear();
+        if (enrolledParticipants != null) {
+            this.enrolledParticipants.clear();
+        }
     }
 
     public void deleteParticipant(Participant participant) {
@@ -107,5 +113,21 @@ public class Course {
 
     public void setTutor(Tutor tutor) {
         this.tutor = tutor;
+    }
+
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    public void addTask(Task task){
+        tasks.add(task);
+    }
+
+    public void removeTask(Task task){
+        tasks.remove(task);
     }
 }

@@ -1,13 +1,7 @@
 package com.speakfreely.speakfreely.controller;
 
-import com.speakfreely.speakfreely.model.Course;
-import com.speakfreely.speakfreely.model.Grade;
-import com.speakfreely.speakfreely.model.Participant;
-import com.speakfreely.speakfreely.model.Tutor;
-import com.speakfreely.speakfreely.repository.CourseRepository;
-import com.speakfreely.speakfreely.repository.GradeRepository;
-import com.speakfreely.speakfreely.repository.ParticipantRepository;
-import com.speakfreely.speakfreely.repository.TutorRepository;
+import com.speakfreely.speakfreely.model.*;
+import com.speakfreely.speakfreely.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,13 +19,17 @@ public class CourseController {
     private final ParticipantRepository participantRepository;
     private final TutorRepository tutorRepository;
     private final GradeRepository gradeRepository;
+    private final TaskRepository taskRepository;
 
     @Autowired
-    public CourseController(CourseRepository courseRepository, ParticipantRepository participantRepository, TutorRepository tutorRepository, GradeRepository gradeRepository) {
+    public CourseController(CourseRepository courseRepository, ParticipantRepository participantRepository,
+                            TutorRepository tutorRepository, GradeRepository gradeRepository,
+                            TaskRepository taskRepository) {
         this.courseRepository = courseRepository;
         this.participantRepository = participantRepository;
         this.tutorRepository = tutorRepository;
         this.gradeRepository = gradeRepository;
+        this.taskRepository = taskRepository;
     }
 
     @GetMapping
@@ -56,15 +54,21 @@ public class CourseController {
     //@PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Course> deleteCourse(@PathVariable("id") Long id) {
-        Optional<Course> course = courseRepository.findById(id);
-        if (course.isEmpty()) {
-            System.out.println("Attempt to delete non existing course.");
+        Optional<Course> optionalCourse = courseRepository.findById(id);
+        if (optionalCourse.isEmpty()) {
+            System.out.println("Attempt to delete non-existing course.");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        course.get().getGrades().stream().
-                mapToLong(Grade::getId).forEach(gradeRepository::deleteById);
-        course.get().deleteParticipants();
-        course.get().deleteTutor();
+
+        Course course = optionalCourse.get();
+        List<Grade> grades = course.getGrades();
+        if (grades != null) {
+            grades.stream()
+                    .mapToLong(Grade::getId)
+                    .forEach(gradeRepository::deleteById);
+        }
+        course.deleteParticipants();
+        course.deleteTutor();
         courseRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -387,6 +391,20 @@ public class CourseController {
             return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
         partialGradeUpdate(foundGrade.get(), updates);
         return new ResponseEntity<>(foundGrade.get(), HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/{courseId}/tasks")
+    public ResponseEntity<Task> addTask(@PathVariable Long courseId, @RequestBody Task task) {
+        Optional<Course> course = courseRepository.findById(courseId);
+        if (course.isEmpty()) {
+            System.out.println("Adding task to course: attempt to use non existing course.");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        course.get().addTask(task);
+        task.setCourse(course.get());
+        courseRepository.save(course.get());
+        taskRepository.save(task);
+        return new ResponseEntity<>(task, HttpStatus.CREATED);
     }
 
     private void partialGradeUpdate(Grade grade, Map<String, Object> updates) {
